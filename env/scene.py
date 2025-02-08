@@ -131,15 +131,14 @@ class Scene:
         self.max_control_iters = self.cfg.max_control_iters
         self.stability_iters = self.cfg.stability_iters
         self.tol = self.cfg.tol
+        self.timestep = self.cfg.timestep
 
-        config_path = os.path.join(
-            self.cfg.scene_config_folder, self.cfg.scene + ".yaml"
-        )
+        config_path = self.cfg.scene_config
         assert os.path.isfile(
             config_path
         ), f"Error: {config_path} is not a file or does not exist! Check your configs"
 
-        self.generate_scene(gui, config_path, timestep)
+        self.generate_scene(gui, config_path, self.timestep)
 
         # Setup camera
         self.camera_list = []
@@ -167,8 +166,6 @@ class Scene:
         self.current_focus = 0
 
         self.prev_keys = {}
-
-        # self.gsam = grounded_sam()
 
         # For motion planning
         if self.robot:
@@ -353,7 +350,7 @@ class Scene:
 
         loaded_objects = {}
         for obj_name, obj in self.config["objects"].items():
-            obj_path = os.path.join(self.cfg.objects_folder, obj["file"])
+            obj_path = os.path.join(self.config["objects_folder"], obj["file"])
             obj_id = self.client_id.loadURDF(
                 obj_path,
                 obj["pos"],
