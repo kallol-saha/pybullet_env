@@ -1,0 +1,6 @@
+[submodule "pybullet_ompl"]
+	path = pybullet_ompl
+	url = https://github.com/kallol-saha/pybullet_ompl.git
+[submodule "pybullet_planning"]
+	path = pybullet_planning
+	url = https://github.com/kallol-saha/pybullet-planning.git
