@@ -1,47 +1,27 @@
-# pybullet_ompl
-This repo provides interface to use OMPL for motion planning inside PyBullet. It uses OMPL python bindings.
+### Create an environment:
 
-![example](/images/example.gif)
-
-# Environment
-Tested with:<br>
-**Python 3.8**<br>
-**Ubuntu18.04**
-
-# Installation instructions:
-
-## Install dependencies of OMPL
-https://github.com/ompl/ompl/blob/main/doc/markdown/installPyPlusPlus.md
-
-## Install OMPL from source
-It is very important that you compile ompl with the correct python version with the CMake flag.
-```
-git clone https://github.com/ompl/ompl.git
-mkdir build/Release
-cd build/Release
-cmake ../.. -DPYTHON_EXEC=/path/to/python-X.Y # This is important!!! Make sure you are pointing to the correct python version.
-make -j 4 update_bindings # replace "4" with the number of cores on your machine. This step takes some time.
-make -j 4 # replace "4" with the number of cores on your machine
+```bash
+conda create -n pybullet_env python=3.9
+conda activate pybullet_env
 ```
 
-## Install Pybullet
-Just install pybullet normally.
-```
-pip install pybullet
+### Install requirements:
+
+```bash
+pip install -r requirements.txt
 ```
 
-# Demo
-Two examples are provided.
-This demo plans the arm motion of a Franka robot.
-```
-python examples/demo_franka.py
+### OMPL installation steps:
+
+Go to https://ompl.kavrakilab.org/installation.html <br>
+Or download directly from https://ompl.kavrakilab.org/install-ompl-ubuntu.sh
+
+Navigate to the folder you downloaded OMPL in, and make the script executable.
+Then, install OMPL with python bindings:
+
+```bash
+chmod u+x install-ompl-ubuntu.sh
+./install-ompl-ubuntu.sh --python
 ```
 
-This demo plans whole-body motion of a planar 4-link snake-like robot.
-```
-python examples/demo_planar.py
-```
-
-# Additional Information
-1. Currently tested planners include PRM, RRT, RRTstar, RRTConnect, EST, FMT* and BIT*. But all planners in OMPL should work. Just add them in the set_planner API in PbOMPL class.
-2. To work with other robot, you might need to inherit from PbOMPLRobot class in PbOMPL and override several functionalities. Refer to my_planar_robot.py for an example. Refer to demo_plannar.py for an example.
+Copy the `ompl-<version>/py-bindings/ompl` folder into `pybullet_env/ompl` (the home folder of this repository)
