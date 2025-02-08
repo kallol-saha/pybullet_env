@@ -1,2 +1,4 @@
 test.py
 ompl
+.vscode
+__pycache__

@@ -1,0 +1,56 @@
+# Simulation parameters:
+seed: 999
+timestep: 0.002
+max_control_iters: 1000
+stability_iters: 1000
+tol: 0.001
+
+# Scene parameters:
+scene_config: configs/scenes/three_cubes.yaml
+
+# Robot parameters:
+gripper_close: 1.
+gripper_open: 0.01771439
+max_joint_force: 240.
+
+# Camera parameters:
+recording_camera: null
+
+#   output_file: execution.mp4    # Saved in the plan_folder
+#   fps: 60
+
+#   mode: "distance"    # or "position"
+
+#   target: [0., 0., 0.8]
+
+#   # For distance mode:
+#   distance: 0.7
+#   yaw: 20.
+#   pitch: -20.
+#   roll: 0.
+#   up_axis_index: 2
+
+#   # whether camera moves:
+#   moving: False
+#   yaw_limit: 160.
+#   yaw_rate: 0.1
+
+#   # For position mode:
+#   eye: [1., 1., 1.]
+#   up_vec: [0., 0., 1.]
+
+#   # Intrinsics:
+#   width: 640
+#   height: 480
+#   fov: 80
+#   near: 0.02
+#   far: 50
+
+#   # If camera is already saved somewhere:
+#   view_matrix: None
+#   projection_matrix: None
+
+# close_gripper_record_skip: 20
+# stability_record_skip: 20
+# actuate_gripper_record_skip: 20
+

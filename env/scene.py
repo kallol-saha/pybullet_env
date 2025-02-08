@@ -118,47 +118,43 @@ class Object:
 class Scene:
     def __init__(
         self,
-        args,
-        seed=None,
-        gui=True,
-        robot=True,
-        timestep=1 / 480,
-        max_control_iters=1000,
-        stability_iters=1000,
-        tol=0.001,
+        cfg,
+        gui: bool = True,
+        robot: bool = True,
     ):
-        self.seed = seed
-        self.args = args
+        self.cfg = cfg
         self.robot: bool = robot
+        self.gui = gui
 
-        self.max_control_iters = max_control_iters
-        self.stability_iters = stability_iters
-        self.tol = tol
+        self.seed = self.cfg.seed
 
-        config_path = os.path.join(
-            self.args.scene_config_folder, self.args.scene + ".yaml"
-        )
+        self.max_control_iters = self.cfg.max_control_iters
+        self.stability_iters = self.cfg.stability_iters
+        self.tol = self.cfg.tol
+        self.timestep = self.cfg.timestep
+
+        config_path = self.cfg.scene_config
         assert os.path.isfile(
             config_path
         ), f"Error: {config_path} is not a file or does not exist! Check your configs"
 
-        self.generate_scene(gui, config_path, timestep)
+        self.generate_scene(gui, config_path, self.timestep)
 
         # Setup camera
         self.camera_list = []
-        for i, cam_args in self.config["cameras"].items():
-            cam = Camera(int(i), self.client_id, cam_args)
+        for i, cam_cfg in self.config["cameras"].items():
+            cam = Camera(int(i), self.client_id, cam_cfg)
             self.camera_list.append(cam)
 
-        if self.args.recording_camera is not None:
+        if self.cfg.recording_camera is not None:
             self.record = True
-            record_cam_args = OmegaConf.to_container(
-                self.args.recording_camera, resolve=True
+            record_cam_cfg = OmegaConf.to_container(
+                self.cfg.recording_camera, resolve=True
             )
             self.recording_cam = Camera(
                 -1,  # Recording camera is given id -1
                 client_id=self.client_id,
-                cam_args=record_cam_args,
+                cam_cfg=record_cam_cfg,
                 record=True,
             )
         else:
@@ -170,8 +166,6 @@ class Scene:
         self.current_focus = 0
 
         self.prev_keys = {}
-
-        # self.gsam = grounded_sam()
 
         # For motion planning
         if self.robot:
@@ -356,7 +350,7 @@ class Scene:
 
         loaded_objects = {}
         for obj_name, obj in self.config["objects"].items():
-            obj_path = os.path.join(self.args.objects_folder, obj["file"])
+            obj_path = os.path.join(self.config["objects_folder"], obj["file"])
             obj_id = self.client_id.loadURDF(
                 obj_path,
                 obj["pos"],
@@ -914,7 +908,7 @@ class Scene:
 
         for i in range(self.max_control_iters):
             self.client_id.stepSimulation()
-            if self.record and (i % self.args.actuate_gripper_record_skip == 0):
+            if self.record and (i % self.cfg.actuate_gripper_record_skip == 0):
                 self.recording_cam.record()
             gripper_pos = self.get_gripper_pos()
             error = np.abs(gripper_joints - gripper_pos)
@@ -935,7 +929,7 @@ class Scene:
 
         for i in range(self.max_control_iters):
             self.client_id.stepSimulation()
-            if self.record and (i % self.args.close_gripper_record_skip == 0):
+            if self.record and (i % self.cfg.close_gripper_record_skip == 0):
                 self.recording_cam.record()
 
             left_contact = (
@@ -983,7 +977,7 @@ class Scene:
     def wait_for_stability(self):
         for k in range(self.stability_iters):
             self.client_id.stepSimulation()
-            if self.record and (k % self.args.stability_record_skip == 0):
+            if self.record and (k % self.cfg.stability_record_skip == 0):
                 self.recording_cam.record()
             obj_vels = np.zeros((self.num_objs, 6))
             for i in range(self.num_objs):
