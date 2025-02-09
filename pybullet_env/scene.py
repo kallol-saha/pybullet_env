@@ -23,7 +23,7 @@ from pybullet_planning.pybullet_tools.ikfast.ikfast import (
     either_inverse_kinematics,
 )
 from pybullet_planning.pybullet_tools.utils import link_from_name
-from env.camera import Camera
+from pybullet_env.camera import Camera
 
 urdf_root_path = pybullet_data.getDataPath()
 # Default start state is self-colliding, which causes motion planning to fail
