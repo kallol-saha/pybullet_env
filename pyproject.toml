@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pybullet_env"
+version = "0.1.0"
+description = "PyBullet environment for simulations"
+authors = [{ name = "Kallol Saha" }]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy==1.26.4",
+    "pybullet",
+    "hydra-core",
+    "scipy",
+    "PyYAML",
+    "opencv-python",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
